@@ -27,12 +27,16 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
     try {
       if (_isLogin) {
-        await ref.read(authControllerProvider.notifier).signIn(
-              _emailController.text.trim(),
-              _passwordController.text,
-            );
+        await ref
+            .read(authControllerProvider.notifier)
+            .signIn(_emailController.text.trim(), _passwordController.text);
       } else {
-        await ref.read(authControllerProvider.notifier).signUp(
+        if (_passwordController.text.length < 6) {
+          throw Exception('Password should be at least 6 characters.');
+        }
+        await ref
+            .read(authControllerProvider.notifier)
+            .signUp(
               _emailController.text.trim(),
               _passwordController.text,
               _nameController.text.trim(),
@@ -41,7 +45,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       }
     } catch (e) {
       setState(() {
-        _errorMessage = e.toString();
+        final error = e.toString();
+        _errorMessage = error.contains('email_not_confirmed')
+            ? 'Please confirm your email address before signing in.'
+            : error;
       });
     } finally {
       if (mounted) setState(() => _isLoading = false);
@@ -51,7 +58,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    
+
     return Scaffold(
       body: Center(
         child: SingleChildScrollView(
@@ -77,9 +84,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 Text(
                   _isLogin ? 'Welcome Back' : 'Join EventHub',
                   style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                        fontWeight: FontWeight.bold,
-                        color: colorScheme.primary,
-                      ),
+                    fontWeight: FontWeight.bold,
+                    color: colorScheme.primary,
+                  ),
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 32),
@@ -164,9 +171,11 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       _errorMessage = null;
                     });
                   },
-                  child: Text(_isLogin
-                      ? "Don't have an account? Sign up"
-                      : "Already have an account? Sign in"),
+                  child: Text(
+                    _isLogin
+                        ? "Don't have an account? Sign up"
+                        : "Already have an account? Sign in",
+                  ),
                 ),
               ],
             ),

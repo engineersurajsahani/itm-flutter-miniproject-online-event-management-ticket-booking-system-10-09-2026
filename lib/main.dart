@@ -12,13 +12,9 @@ void main() async {
 
   // Initialize Supabase
   await Supabase.initialize(
-    url: dotenv.env['SUPABASE_URL'] ?? 'https://xxxxx.supabase.co',
-    publishableKey: dotenv.env['SUPABASE_ANON_KEY'] ?? 'anon-key',
+    url: 'https://iguwstxqlzufaflnhehz.supabase.co',
+    publishableKey: 'sb_publishable_f8KMRlik7PIZaBea3hXp7A_IjB84d8v',
   );
 
-  runApp(
-    const ProviderScope(
-      child: EventHubApp(),
-    ),
-  );
+  runApp(const ProviderScope(child: EventHubApp()));
 }
