@@ -631,4 +631,9 @@ MIT License. See [LICENSE](LICENSE) for details.
 
 ---
 
-**Built with Flutter & Supabase.** 
+**Built with Flutter & Supabase.**
+
+## Project Summary
+
+EventHub is an online event management and ticket booking system focused on
+event creation, ticket booking, booking analytics, and admin monitoring.
